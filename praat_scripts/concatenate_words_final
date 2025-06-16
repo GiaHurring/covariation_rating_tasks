@@ -1,0 +1,79 @@
+##AUTHOR: Lucie Menard, McGill University
+
+#1. opens a list of .wav files
+#2. extracts file names
+#3. concatenates the files
+#4. remanes the resulting concatenated file
+#5. saves it
+
+filename1$ = chooseReadFile$: "Select the first file to concatenate"
+Read from file: filename1$
+name_file1$ = selected$ ("Sound")
+filename2$ = chooseReadFile$: "Select the second file to concatenate"
+Read from file: filename2$
+name_file2$ = selected$ ("Sound")
+filename3$ = chooseReadFile$: "Select the third file to concatenate"
+Read from file: filename3$
+name_file3$ = selected$ ("Sound")
+filename4$ = chooseReadFile$: "Select the fourth file to concatenate"
+Read from file: filename4$
+name_file4$ = selected$ ("Sound")
+dir_name$ = chooseDirectory$: "Choose a directory to save the concatenated files"
+output_dir_name$ = "'dir_name$'" + "/" 
+
+string1$ = "'name_file1$'"
+length = length(string1$)
+ind=index(string1$,"-")
+part1_file1$ = mid$(string1$,1,ind-1) 
+part2_file1$ = mid$(string1$,ind+1,3) 
+part3_file1$ = mid$(string1$,ind+5,1) 
+
+string2$ = "'name_file2$'"
+length = length(string2$)
+ind=index(string2$,"-")
+part1_file2$ = mid$(string2$,1,ind-1) 
+part2_file2$ = mid$(string2$,ind+1,3) 
+part3_file2$ = mid$(string2$,ind+5,1) 
+
+string3$ = "'name_file3$'"
+length = length(string3$)
+ind=index(string3$,"-")
+part1_file3$ = mid$(string3$,1,ind-1) 
+part2_file3$ = mid$(string3$,ind+1,3) 
+part3_file3$ = mid$(string3$,ind+5,1) 
+
+string4$ = "'name_file4$'"
+length = length(string4$)
+ind=index(string4$,"-")
+part1_file4$ = mid$(string4$,1,ind-1) 
+part2_file4$ = mid$(string4$,ind+1,3) 
+part3_file4$ = mid$(string4$,ind+5,1) 
+
+name_file_out1$=part1_file1$ + part1_file3$ + "-" + part2_file1$+ "-" + part3_file1$ + part3_file3$
+
+selectObject: "Sound 'name_file1$'"
+plusObject: "Sound 'name_file3$'"
+Concatenate
+Write to WAV file... 'output_dir_name$''name_file_out1$'.wav
+
+name_file_out2$=part1_file2$ + part1_file4$ + "-" + part2_file2$+ "-" + part3_file2$ + part3_file4$
+
+selectObject: "Sound 'name_file2$'"
+plusObject: "Sound 'name_file4$'"
+Concatenate
+Write to WAV file... 'output_dir_name$''name_file_out2$'.wav
+
+name_file_out3$=part1_file1$ + part1_file4$ + "-" + part2_file1$+ "-" + part3_file1$ + part3_file4$
+
+selectObject: "Sound 'name_file1$'"
+plusObject: "Sound 'name_file4$'"
+Concatenate
+Write to WAV file... 'output_dir_name$''name_file_out3$'.wav
+
+name_file_out4$=part1_file2$ + part1_file3$ + "-" + part2_file2$+ "-" + part3_file2$ + part3_file3$
+
+selectObject: "Sound 'name_file2$'"
+plusObject: "Sound 'name_file3$'"
+Concatenate
+Write to WAV file... 'output_dir_name$''name_file_out4$'.wav
+

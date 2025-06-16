@@ -1,0 +1,96 @@
+##AUTHOR: Lucie Menard, McGill University
+
+#script to change the duration of a sound interval, adjust the corresponding TextGrid boundaries and saves in a folder
+#the interval must be on the 3rd interval tier
+#the user must open a wav+TexGrid, View and Edit, select the interval and click on the menu option
+
+textGridInfo$= TextGrid info
+tgObjID$ = extractWord$(textGridInfo$, "Object name: ")
+
+beg_sel=Get start of selection
+end_sel=Get end of selection
+dur_sel=Get length of selection
+Extract selected sound (preserve times)
+
+endeditor
+
+selectObject: "Sound untitled"
+Rename: "Vowel"
+
+form Change vowel duration
+ 	real duration_to_match  
+endform
+
+new_dur=duration_to_match
+new_dur_msec=new_dur*1000
+ratio=new_dur/dur_sel
+bound_new_dur=new_dur-dur_sel
+
+vowel$ = selected$ ("Sound Vowel")
+Lengthen (overlap-add): 75, 600, ratio
+Rename: "Vowel-mod"
+
+selectObject: "Sound Vowel-mod"
+View & Edit
+editor: "Sound Vowel-mod"
+
+beg_sel_v=Get start of visible part
+end_sel_v=Get end of visible part
+Select: beg_sel_v, end_sel_v
+Copy selection to Sound clipboard
+endeditor
+
+selectObject: "Sound 'tgObjID$'"
+object_info$ = Info
+path_name$ = extractLine$(object_info$, "Associated file: ")
+current_path1$=replace$(path_name$,tgObjID$,"",1)
+current_path$=replace$(current_path1$,".wav","",1)
+createFolder(current_path$ + "durmod")
+View & Edit
+
+editor: "Sound 'tgObjID$'"
+Select: beg_sel, end_sel
+Paste over selection
+
+endeditor
+
+selectObject: "Sound 'tgObjID$'"
+Copy: "'tgObjID$'"
+Rename: "'tgObjID$'-durmod-'new_dur_msec'"
+
+selectObject: "Sound 'tgObjID$'-durmod-'new_dur_msec'"
+Save as WAV file: "'current_path$'durmod/'tgObjID$'-durmod-'new_dur_msec'.wav"
+
+#moves boundaries at the right of the vowel offset
+selectObject: "TextGrid 'tgObjID$'"
+Copy: "'tgObjID$'"
+Rename: "'tgObjID$'-durmod-'new_dur_msec'"
+
+nb_int= Get number of intervals... 2
+         for i to nb_int
+          	label$[i] = Get label of interval... 2 i
+         endfor
+
+         for i to nb_int-1
+	        selectObject: "TextGrid 'tgObjID$'-durmod-'new_dur_msec'"
+		bound=Get end time of interval: 2, i
+		if bound > beg_sel
+			new_bound=bound+bound_new_dur
+			Remove right boundary... 2 i
+			Insert boundary... 2 new_bound
+			name_int$=label$[i]
+			Set interval text: 2, i, "'name_int$'"
+		endif
+			
+	 endfor
+
+	 if i==nb_int
+			name_int$=label$[i]
+			Set interval text: 2, i, "'name_int$'"
+	 endif
+
+selectObject: "TextGrid 'tgObjID$'-durmod-'new_dur_msec'"
+Write to text file: "'current_path$'durmod/'tgObjID$'-durmod-'new_dur_msec'.TextGrid"
+
+
+

@@ -1,0 +1,97 @@
+##AUTHOR: Lucie Menard, McGill University
+
+#script to shorten a segment labelled /t/ to 40 ms
+#to be used with the /s/ part of the biphonemic /ts/ sounds, to make it monophonemic (fricated /t/)
+#requires a Sound object and a corresponding TextGrid with an interval tier (in which one interval is labelled "t")
+#usage: 
+#    1. open the sound and TextGrid to modify, select it in the Praat Object Window and click 'View & Edit'
+#    2. select the interval labelled "t" and select Edit, Shorten_s_fromTG
+
+
+dir_name$ = chooseDirectory$: "Choose a directory to save the short-s files"
+output_dir_name$ = "'dir_name$'" + "/" 
+
+textGridInfo$= TextGrid info
+tgObjID$ = extractWord$(textGridInfo$, "Object name: ")
+
+beg_sel=Get start of selection
+end_sel=Get end of selection
+dur_sel=Get length of selection
+mid_sel=beg_sel+(dur_sel/2)
+dur_to_cut=dur_sel-0.040
+ratio=0.040/dur_sel
+
+
+Extract selected sound (preserve times)
+Extract selected TextGrid (preserve times)
+endeditor
+
+selectObject: "Sound untitled"
+Rename: "s"
+selectObject: "TextGrid untitled"
+Rename: "s"
+
+selectObject: "Sound s"
+Lengthen (overlap-add): 75, 600, ratio
+Rename: "s-mod"
+
+selectObject: "Sound s-mod"
+View & Edit
+editor: "Sound s-mod"
+
+beg_sel_s=Get start of visible part
+end_sel_s=Get end of visible part
+Select: beg_sel_s, end_sel_s
+Copy selection to Sound clipboard
+endeditor
+
+selectObject: "Sound 'tgObjID$'"
+View & Edit
+
+editor: "Sound 'tgObjID$'"
+Select: beg_sel, end_sel
+Paste over selection
+
+endeditor
+
+selectObject: "Sound 'tgObjID$'"
+Rename: "'tgObjID$'-short_s"
+
+name_file$ = selected$ ("Sound")
+Write to WAV file... 'output_dir_name$''name_file$'.wav
+
+#moves boundaries at the right of the s offset
+selectObject: "TextGrid 'tgObjID$'"
+Rename: "'tgObjID$'-short_s"
+
+nb_int= Get number of intervals... 2
+         for i to nb_int
+          	label$[i] = Get label of interval... 2 i
+         endfor
+
+         for i to nb_int-1
+	        selectObject: "TextGrid 'tgObjID$'-short_s"
+			bound=Get end time of interval: 2, i
+			if bound > beg_sel
+				new_bound=bound-dur_to_cut
+				Remove right boundary... 2 i
+				Insert boundary... 2 new_bound
+				name_int$=label$[i]
+				Set interval text: 2, i, "'name_int$'"
+			endif
+		 endfor
+
+	 if i==nb_int
+			name_int$=label$[i]
+			Set interval text: 2, i, "'name_int$'"
+	 endif
+
+selectObject: "TextGrid 'tgObjID$'-short_s"
+Write to text file: "'output_dir_name$''name_file$'.TextGrid"
+
+selectObject: "Sound s"
+plusObject: "TextGrid s"
+plusObject: "Sound s-mod"
+Remove
+
+

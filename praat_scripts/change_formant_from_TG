@@ -1,0 +1,94 @@
+##AUTHOR: Lucie Menard, McGill University
+
+#script to be used with the Vocal Toolkit plugin
+#to be done by the user:
+#	1. open a wav file and a TextGrid, select both and click View & Edit
+#	2. select the vowel to change
+#	3. in the Edit menu of the TextGrid Editor, select 'Change formants Gia (TG)'
+#	(this means that before, the script was added in the Edit menu through 'File, Add to menu' in the TextGrid editor
+#	4. the folder 'mod_Innovative' or 'mod_Conservative' is created in the current directory and the modified files are stored in this directory
+#make sure:
+#	1. the current script is in the same directory as the .wav files and TextGrid
+# 	2. the folder 'plugin_VocalToolkit' is in the current directory (copy paste this directory after installing the Vocal Toolkit plusgin (https://www.praatvocaltoolkit.com/index.html)
+
+
+
+form Change formants
+	boolean innovative 0
+	boolean conservative 0
+ 	real new_F1_mean 
+ 	real new_F2_mean 
+endform
+
+new_f1 = new_F1_mean
+new_f2 = new_F2_mean
+
+
+beg_sel=Get start of selection
+end_sel=Get end of selection
+dur_sel=Get length of selection
+
+textGridInfo$= TextGrid info
+tgObjID$ = extractWord$(textGridInfo$, "Object name: ")
+
+endeditor
+
+selectObject: "Sound 'tgObjID$'"
+object_info$ = Info
+path_name$ = extractLine$(object_info$, "Associated file: ")
+current_path1$=replace$(path_name$,tgObjID$,"",1)
+current_path$=replace$(current_path1$,".wav","",1)
+#writeInfo(current_path$)
+
+if innovative==1
+	createFolder(current_path$ + "mod_Innovative")
+elsif conservative==1
+	createFolder(current_path$ + "mod_Conservative")
+endif
+
+selectObject: "Sound 'tgObjID$'"
+Copy: "'tgObjID$'"
+
+View & Edit
+editor: "Sound 'tgObjID$'"
+Select: beg_sel, end_sel
+Extract selected sound (preserve times)
+
+endeditor
+
+vowel$ = selected$ ("Sound")
+runScript: "plugin_VocalToolkit/changeformants.praat", new_f1, new_f2, 0, 0, 0, 5500, "yes", "yes", "no"
+
+selectObject: "Sound untitled-changeformants"
+View & Edit
+editor: "Sound untitled-changeformants"
+Select: beg_sel, end_sel
+Copy selection to Sound clipboard
+endeditor
+
+editor: "Sound 'tgObjID$'"
+Paste over selection
+
+Show all
+total_length=Get length of visible part
+Select: 0, total_length
+
+#soundInfo$= Sound info
+#tgObjID$ = extractWord$(soundInfo$, "Object name: ")
+
+Extract selected sound (time from 0)
+endeditor
+if innovative==1
+	Rename: "'tgObjID$'-mod_inn"
+	Save as WAV file: "'current_path$'mod_Innovative/'tgObjID$'-mod_inn.wav"
+elsif conservative==1
+	Rename: "'tgObjID$'-mod_cons"
+	Save as WAV file: "'current_path$'mod_Conservative/'tgObjID$'-mod_cons.wav"
+endif
+
+
+selectObject: "Sound untitled"
+plusObject: "Sound 'tgObjID$'"
+plusObject: "Sound untitled-changeformants"
+Remove
+
