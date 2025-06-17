@@ -8193,7 +8193,7 @@ ranef_both_tasks_plot <- ranef_both_tasks_gender %>%
 
 ranef_both_tasks_plot
 
-cor.test(ranef_both_tasks_gender$binary_condval, ranef_both_tasks_gender$slider_condval, method = "spearman")
+cor.test(ranef_both_tasks_gender$binary_condval, ranef_both_tasks_gender$slider_condval, method = "pearson")
 
 ```
 
