@@ -974,6 +974,9 @@ exp1_data_binary_final_education %>%
   geom_boxplot() +
   facet_wrap(~vowel_1)
 
+
+scale_colour_discrete(labels = c("cons", "inn"))
+
 #plot of H1 and H2
 exp1_binary_education_H1_H2 <- exp1_data_binary_final_education %>%
   filter(
@@ -1079,7 +1082,8 @@ exp1_binary_education_H1_H2 <- exp1_data_binary_final_education %>%
     legend.text = element_text(size = 12),
     legend.title = element_text(size = 12)
   ) +
-  guides(colour = guide_legend(title = "first vowel manipulation")) 
+  guides(colour = guide_legend(title = "first vowel")) +
+  scale_colour_discrete(labels = c("cons", "inn"))
 
 exp1_binary_education_H1_H2
 
@@ -1369,7 +1373,8 @@ exp1_binary_accent_H1_H2 <- exp1_data_binary_final_accent %>%
     legend.text = element_text(size = 12),
     legend.title = element_text(size = 12)
   ) +
-  guides(colour = guide_legend(title = "first vowel manipulation")) 
+  guides(colour = guide_legend(title = "first vowel")) +
+  scale_colour_discrete(labels = c("cons", "inn"))
 
 exp1_binary_accent_H1_H2
 ```
@@ -2064,7 +2069,8 @@ exp1_slider_education_H1_H2 <- exp1_data_slider_final_education %>%
     legend.text = element_text(size = 12),
     legend.title = element_text(size = 12)
   ) +
-  guides(colour = guide_legend(title = "first vowel manipulation")) 
+  guides(colour = guide_legend(title = "first vowel")) +
+  scale_colour_discrete(labels = c("cons", "inn"))
 
 exp1_slider_education_H1_H2
 ```
@@ -2338,7 +2344,8 @@ exp1_slider_accent_H1_H2 <- exp1_data_slider_final_accent %>%
     legend.text = element_text(size = 12),
     legend.title = element_text(size = 12)
   ) +
-  guides(colour = guide_legend(title = "first vowel manipulation")) 
+  guides(colour = guide_legend(title = "first vowel")) +
+  scale_colour_discrete(labels = c("cons", "inn"))
 
 exp1_slider_accent_H1_H2
 ```
@@ -5148,6 +5155,8 @@ exp2_data_binary_final_gender <- exp2_data_binary_final_gender %>%
     pred_mod2 = predict(exp2_binary_model_gender, type = "response"),
   )
 
+scale_colour_discrete(labels = c("cons", "inn"))
+
 #plot of H1 and H2
 exp2_binary_gender_H1_H2 <- exp2_data_binary_final_gender %>%
   filter(
@@ -5254,7 +5263,8 @@ exp2_binary_gender_H1_H2 <- exp2_data_binary_final_gender %>%
     legend.text = element_text(size = 12),
     legend.title = element_text(size = 12)
   ) +
-  guides(colour = guide_legend(title = "first variable manipulation")) 
+  guides(colour = guide_legend(title = "first variable")) +
+  scale_colour_discrete(labels = c("cons", "inn"))
 
 exp2_binary_gender_H1_H2
 ```
@@ -5569,7 +5579,8 @@ exp2_binary_education_H1_H2 <- exp2_data_binary_final_education %>%
     legend.text = element_text(size = 12),
     legend.title = element_text(size = 12)
   ) +
-  guides(colour = guide_legend(title = "first variable manipulation")) 
+  guides(colour = guide_legend(title = "first variable")) +
+  scale_colour_discrete(labels = c("cons", "inn"))
 
 exp2_binary_education_H1_H2
 ```
@@ -5881,7 +5892,8 @@ exp2_binary_accent_H1_H2 <- exp2_data_binary_final_accent %>%
     legend.text = element_text(size = 12),
     legend.title = element_text(size = 12)
   ) +
-  guides(colour = guide_legend(title = "first variable manipulation")) 
+  guides(colour = guide_legend(title = "first variable")) +
+  scale_colour_discrete(labels = c("cons", "inn")) 
 
 exp2_binary_accent_H1_H2
 ```
@@ -6889,7 +6901,8 @@ exp2_slider_education_H1_H2 <- exp2_data_slider_final_education %>%
     legend.text = element_text(size = 12),
     legend.title = element_text(size = 12)
   ) +
-  guides(colour = guide_legend(title = "first variable manipulation")) 
+  guides(colour = guide_legend(title = "first variable"))  +
+  scale_colour_discrete(labels = c("cons", "inn"))
 
 exp2_slider_education_H1_H2
 ```
@@ -7140,7 +7153,8 @@ exp2_slider_accent_H1_H2 <- exp2_data_slider_final_accent %>%
     legend.text = element_text(size = 12),
     legend.title = element_text(size = 12)
   ) +
-  guides(colour = guide_legend(title = "first variable manipulation")) 
+  guides(colour = guide_legend(title = "first variable")) +
+  scale_colour_discrete(labels = c("cons", "inn")) 
 
 exp2_slider_accent_H1_H2
 ```
